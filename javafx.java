@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
  
-public class Exercises extends Application {
+public class javafx extends Application {
  
    @Override
    public void start(Stage stage) {
@@ -22,6 +22,8 @@ public class Exercises extends Application {
        stage.setScene(scene);
        stage.show();
    }
+
+
  
    public static void main(String[] args) {
        launch(args);
