@@ -3,7 +3,7 @@ public class jsonCode {
     class words {
         public String word;
         public String[] synonyms = new String[]{};
-        public String[] antonymss = new String[]{};
+        public String[] antonyms = new String[]{};
          
     }
 
