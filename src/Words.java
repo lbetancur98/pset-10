@@ -19,6 +19,13 @@ public class Words {
 	}
 	public void addSynonym(String synonym) {
 		this.synonyms.add(synonym);
+    }
+    public void addAntonym(String antonym) {
+		this.antonyms.add(antonym);
+	}
+	public String getSpelling() {
+		this.word = this.word.substring(0, 1).toUpperCase().concat(this.word.substring(1, word.length()).toLowerCase());
+		return this.word;
 	}
 
 
