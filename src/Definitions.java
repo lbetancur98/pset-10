@@ -6,6 +6,9 @@ public class Definitions{
 	public Definitions(String definition, String partsOfSpeech) {
 		this.definition = definition;
 		this.partOfSpeech = partsOfSpeech;
+    }
+    public String getDefinition() {
+		return this.definition;
 	}
 
 }
