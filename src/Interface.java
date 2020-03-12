@@ -575,4 +575,57 @@ public class Interface extends Application {
                    Alert doneIt = new Alert(AlertType.INFORMATION);
                    doneIt.setHeaderText("Successfully created word " + newWord.getSpelling());
                    Optional < ButtonType > done = doneIt.showAndWait();
+
+                   if (done.isPresent() && done.get() == ButtonType.OK) {
+                    event.consume();
+                   }
+             
+             
+                  } catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+                   e.printStackTrace();
+                  }
+                  Dictionary.addWord(newWord);
+                  data.clear();
+                  filterInput.textProperty().addListener(obs -> {
+             
+                   String filter = filterInput.getText();
+                   if (filter == null || filter.length() == 0) {
+                    filteredData.setPredicate(s -> true);
+                   } else {
+                    filteredData.setPredicate(s -> s.matches(filter + ".*"));
+                   }
+             
+                  });
+             
+                  currentWordList = filteredData;
+             
+                  display(ascending, ps, scene);
+                  extraDefs = 0;
+             
+                 }
+                }
+               };
+             
+               confirmNewWord.setOnAction(submit);
+               confirmNewWord.setLayoutX(5);
+             
+               right.getChildren().addAll(topRight, defFields, antsyn);
+             
+               scroll.setContent(right);
+               antsyn.getChildren().add(confirmNewWord);
+               Separator separator2 = new Separator();
+               separator2.setOrientation(Orientation.VERTICAL);
+               spelling.setStrokeWidth(2);
+               list.setPrefWidth(150);
+               int maxHeight = 600;
+               list.setPrefHeight(maxHeight);
+               left.setSpacing(5);
+               right.setSpacing(10);
+               left.setPadding(new Insets(2, 2, 2, 2));
+               GridPane.setMargin(scroll, new Insets(2, 10, 2, 2));
+               HBox both = new HBox(left, scroll);
+               both.setSpacing(20);
+               content.add(both, 0, 0);
+             
+              }
 }
