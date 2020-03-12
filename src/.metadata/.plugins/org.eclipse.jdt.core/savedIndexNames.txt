@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Users\cvasquez\Desktop\APCSA\pset-10\src\.metadata\.plugins\org.eclipse.jdt.core
+3299077141.index
