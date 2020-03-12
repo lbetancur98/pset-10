@@ -33,6 +33,12 @@ public class Words {
 	}
 	public String getADefintion(int index) {
 		return this.definitions.get(index).getDefinition();
+    }
+    public ArrayList<String> getSynonyms() {
+		return this.synonyms;
+	}
+	public ArrayList<String> getAntonyms() {
+		return this.antonyms;
 	}
 
 
