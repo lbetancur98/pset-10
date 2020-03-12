@@ -59,4 +59,21 @@ public class Dictionary {
         return newWordList; 
     } 
 
+    public static void addWord(Words word) {
+		
+		Gson gson=new GsonBuilder().setPrettyPrinting().create();
+		String json = gson.toJson(addToList(wordList.length, wordList, word));
+	  try {
+	   FileWriter writer = new FileWriter(".\\JSON\\words.json");
+	   wordList = addToList(wordList.length, wordList, word);
+	   writer.write(json);
+	   writer.close();
+	  
+	  } catch (IOException e) {
+	   e.printStackTrace();
+	  }
+	  
+
+	}
+
 }
