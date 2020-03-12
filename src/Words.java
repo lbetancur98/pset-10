@@ -12,6 +12,13 @@ public class Words {
 		this.definitions = definitions;
 		this.synonyms = synonyms;
 		this.antonyms = antonyms;
+    }
+    
+    public void setDefinition(Definitions definitions) {
+		this.definitions.add(definitions);  
+	}
+	public void addSynonym(String synonym) {
+		this.synonyms.add(synonym);
 	}
 
 
