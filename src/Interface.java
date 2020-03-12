@@ -509,5 +509,70 @@ public class Interface extends Application {
                TextField synField = new TextField();
                synField.setPromptText("Synonyms...");
                antsyn.getChildren().add(synField);
+               antsyn.getChildren().add(antHeader);
+
+               TextField antField = new TextField();
+               antField.setPromptText("Antonyms...");
+               antsyn.getChildren().add(antField);
              
+             
+               Button confirmNewWord = new Button("Add");
+               EventHandler < ActionEvent > submit = new EventHandler < ActionEvent > () {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void handle(ActionEvent event) {
+                 String[] tempAntonyms = antField.getText().split(",");
+                 List < String > antList = Arrays.asList(tempAntonyms);
+                 ArrayList < String > antonyms = new ArrayList < String > (antList);
+                 String[] tempSynonyms = synField.getText().split(",");
+                 List < String > synList = Arrays.asList(tempSynonyms);
+                 ArrayList < String > synonyms = new ArrayList < String > (synList);
+             
+                 int viableDefs = 0;
+                 for (int i = 1; i < (extraDefs + 3); i += 2) {
+                  Definitions newDefinition = new Definitions(((TextField) defFields.getChildren().get(i)).getText(), ((ComboBox < String > ) defFields.getChildren().get(i + 1)).getValue());
+                  if (newDefinition.getDefinition() != null && !newDefinition.getDefinition().isEmpty() && newDefinition.getPartOfSpeech() != null) {
+                   newDefs.add(newDefinition);
+                   viableDefs++;
+                  }
+                 }
+                 Words newWord = null;
+                 String newSpelling = addSpelling.getText();
+                 if (newSpelling.contains(" ") || newSpelling.matches("^.*[^a-zA-Z0-9 ].*$") || newSpelling.isEmpty()) {
+                  resetAddingWord("Please only use non-empty, alphanumeric characters when entering your word's spelling...", event);
+                  validWord = false;
+                  event.consume();
+                 } else if (Dictionary.listSpellings(ascending).contains(newSpelling)) {
+                  resetAddingWord("This word is already in the dictionary...", event);
+                  validWord = false;
+                  event.consume();
+                 } else if (viableDefs < 1) {
+                  resetAddingWord("Please enter at least one definition with a part of speech...", event);
+                  validWord = false;
+                  event.consume();
+                 } else if (antField.getText().contains(" ")) {
+                  for (String ant: antList) {
+                   if (ant.isBlank() || ant.isEmpty() || ant.matches("^.*[^a-zA-Z0-9 ].*$")) {
+                    resetAddingWord("Please list antonymns in form: \"word, word, word\"", event);
+                    validWord = false;
+                    event.consume();
+                   }
+                  }
+                 } else if (synField.getText().contains(" ")) {
+                  for (String syn: synList) {
+                   if (syn.isBlank() || syn.isEmpty() || syn.matches("^.*[^a-zA-Z0-9 ].*$")) {
+                    resetAddingWord("Please list synonymns in form: \"word, word, word\"", event);
+                    validWord = false;
+                    event.consume();
+                   }
+                  }
+                 } else {
+                  validWord = true;
+                 }
+                 if (validWord) {
+                  try {
+                   newWord = new Words(newSpelling, newDefs, synonyms, antonyms);
+                   Alert doneIt = new Alert(AlertType.INFORMATION);
+                   doneIt.setHeaderText("Successfully created word " + newWord.getSpelling());
+                   Optional < ButtonType > done = doneIt.showAndWait();
 }
