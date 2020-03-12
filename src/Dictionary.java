@@ -30,6 +30,20 @@ public class Dictionary {
 			Collections.sort(listOfWords);
 		}
 		return listOfWords;
-	}
+    }
+    
+    public static ArrayList<Words> sortObj(Boolean ascending, List<String> sortedSpellings) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		
+		wordList = addAllWords();
+		ArrayList<Words> sortedObj = new ArrayList<Words>();
+		for (int i = 0; sortedObj.size() < sortedSpellings.size(); i++) {
+		
+			for (Words word : wordList) {
+				if (sortedSpellings.get(i).equals(word.getSpelling())) {
+					sortedObj.add(word);
+					break;
+				}
+				
+		}
 
 }
