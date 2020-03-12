@@ -80,5 +80,123 @@ public class Interface extends Application {
         launch(args);
       
        }
+
+       public void start(Stage primaryStage) {
+
+        EventHandler < ActionEvent > removeWord = new EventHandler < ActionEvent > () {
+         @Override
+         public void handle(ActionEvent event) {
+          if (list.getSelectionModel().getSelectedItems().size() != 0) {
+           Alert alert = new Alert(AlertType.CONFIRMATION);
+           alert.setTitle("Confirmation Dialog");
+           alert.setHeaderText("DELETING WORD");
+           alert.setContentText("Are you sure you want to delete selected words?");
       
+           Optional < ButtonType > result = alert.showAndWait();
+           if (result.get() == ButtonType.OK && list.getSelectionModel().getSelectedIndices() != null) {
+            try {
+             Words[] wordsToDelete = new Words[list.getSelectionModel().getSelectedIndices().size()];
+             for (int i = 0; i < list.getSelectionModel().getSelectedItems().size(); i++) {
+              for (Words orgWord: Dictionary.wordList) {
+               if (orgWord.getSpelling().equals(list.getSelectionModel().getSelectedItems().get(i))) {
+                wordsToDelete[i] = orgWord;
+               }
+              }
+             }
+             Dictionary.delWord(wordsToDelete);
+             data.clear();
+             filterInput.textProperty().addListener(obs -> {
+      
+              String filter = filterInput.getText();
+              if (filter == null || filter.length() == 0) {
+               filteredData.setPredicate(s -> true);
+              } else {
+               filteredData.setPredicate(s -> s.matches(filter + ".*"));
+              }
+             });
+      
+             currentWordList = filteredData;
+      
+             display(ascending, primaryStage, scene);
+             Alert success = new Alert(AlertType.INFORMATION);
+             success.setHeaderText("Successfully deleted word!");
+             Optional < ButtonType > done = success.showAndWait();
+      
+             if (done.isPresent() && done.get() == ButtonType.OK) {
+              event.consume();
+             }
+            } catch (JsonIOException e) {
+             e.printStackTrace();
+            } catch (JsonSyntaxException e) {
+             e.printStackTrace();
+            }
+           } else {
+            event.consume();
+           }
+           event.consume();
+          } else {
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("ERROR");
+           alert.setHeaderText("No words to delete...");
+           Optional < ButtonType > result = alert.showAndWait();
+      
+           if (result.isPresent() && result.get() == ButtonType.OK) {
+            event.consume();
+           }
+           event.consume();
+          }
+         }
+        };
+      
+        right = new VBox();
+        Dictionary.listSpellings(ascending).forEach(data::add);
+      
+        defHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+        synHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+        antHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+        filterInput = new TextField();
+        
+        filterInput.textProperty().addListener(obs -> {
+
+            String filter = filterInput.getText();
+            if (filter == null || filter.length() == 0) {
+             filteredData.setPredicate(s -> true);
+            } else {
+             filteredData.setPredicate(s -> s.matches(filter + ".*"));
+            }
+         
+           });
+         
+           currentWordList = filteredData;
+         
+           int maxHeight = 600;
+         
+           index = -1;
+           content = new GridPane();
+         
+           content.setPadding(new Insets(5, 10, 5, 5));
+           list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+           list.getSelectionModel().selectedItemProperty()
+            .addListener(new ChangeListener < String > () {
+         
+         
+         
+             public void changed(ObservableValue < ? extends String > observable,
+              String oldValue, String newValue) {
+         
+              if (list.getSelectionModel().getSelectedIndices().size() == 1 && (firstWord || currentWordList.contains(currentWord.getSpelling()))) {
+               index = currentWordList.indexOf(list.getSelectionModel().getSelectedItem());
+         
+         
+               try {
+                objsDisplayed = Dictionary.sortObj(ascending, currentWordList);
+               } catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+         
+                e.printStackTrace();
+               }
+               if (index != -1) {
+         
+                currentWord = objsDisplayed.get(index);
+         
+               }
 }
