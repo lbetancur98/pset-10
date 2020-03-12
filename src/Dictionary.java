@@ -10,6 +10,11 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException; 
 
 public class Dictionary {
+    public static Words[] wordList;
+	
+	public static Words[] addAllWords() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		wordList = new Gson().fromJson(new FileReader(".\\JSON\\words.json"), Words[].class);
+		return wordList;
+	}
 
-    
 }
