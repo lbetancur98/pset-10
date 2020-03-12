@@ -289,4 +289,92 @@ public class Interface extends Application {
             content.add(both, 0, 0);
           
             scene = new Scene(content, 1100, maxHeight);
+
+            desc.selectedProperty().addListener(new ChangeListener < Boolean > () {
+
+                @Override
+                public void changed(ObservableValue < ? extends Boolean > observable, Boolean oldValue, Boolean newValue) {
+                 if (newValue) {
+                  data.clear();
+                  ascending = false;
+                  asc.setSelected(false);
+                  display(ascending, primaryStage, scene);
+             
+                 } else {
+                  asc.setSelected(true);
+                 }
+             
+                }
+               });
+               asc.selectedProperty().addListener(new ChangeListener < Boolean > () {
+             
+                @Override
+                public void changed(ObservableValue < ? extends Boolean > observable, Boolean oldValue, Boolean newValue) {
+             
+                 if (newValue) {
+                  data.clear();
+                  ascending = true;
+                  desc.setSelected(false);
+             
+                  display(ascending, primaryStage, scene);
+                 } else {
+                  desc.setSelected(true);
+                 }
+             
+                }
+               });
+               EventHandler < ActionEvent > addWord = new EventHandler < ActionEvent > () {
+                @Override
+                public void handle(ActionEvent event) {
+             
+                 addWordScreen(primaryStage, scene, left);
+                 event.consume();
+                }
+               };
+               addButton.setOnAction(addWord);
+               rmButton.setOnAction(removeWord);
+               list.getSelectionModel().clearSelection();
+               primaryStage.setScene(scene);
+               primaryStage.show();
+             
+              }
+              private void resetAddingWord(String message, ActionEvent event) {
+               Alert badInput = new Alert(AlertType.ERROR);
+               badInput.setTitle("Invalid input!");
+               badInput.setHeaderText(message);
+               Optional < ButtonType > done = badInput.showAndWait();
+               right.getChildren().clear();
+               validWord = true;
+               if (done.isPresent() && done.get() == ButtonType.OK) {
+             
+                event.consume();
+               }
+              }
+             
+              public void display(boolean ascending, Stage ps, Scene scene) {
+             
+               Dictionary.listSpellings(ascending).forEach(data::add);
+               defHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+               synHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+               antHeader.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+             
+               content.setPadding(new Insets(5, 10, 5, 5));
+               spelling.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 36));
+               ArrayList < String > synonyms = new ArrayList < String > ();
+             
+               ArrayList < String > antonyms = new ArrayList < String > ();
+               if (currentWord != null) {
+             
+             
+                right.getChildren().clear();
+                spelling.setText(currentWord.getSpelling());
+             
+                right.getChildren().addAll(spelling);
+                right.getChildren().addAll(defHeader);
+                definitions = currentWord.getDefintion();
+                for (Definitions def: definitions) {
+                 right.getChildren().addAll(new Text(definitions.indexOf(def) + 1 + ". " + currentWord.getSpelling() + " (" + def.getPartOfSpeech() + ")"));
+                 right.getChildren().addAll(new Text("\t" + def.getDefinition()));
+                }
+               }
 }
