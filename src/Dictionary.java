@@ -15,6 +15,21 @@ public class Dictionary {
 	public static Words[] addAllWords() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		wordList = new Gson().fromJson(new FileReader(".\\JSON\\words.json"), Words[].class);
 		return wordList;
+    }
+    
+    public static ArrayList<String> listSpellings(Boolean ascending) {
+		ArrayList<String> listOfWords = new ArrayList<String>();
+		
+		for (Words word : wordList)  {	
+			listOfWords.add(word.getSpelling());
+		}
+		
+		if (ascending) {
+			Collections.sort(listOfWords, Collections.reverseOrder());	
+		} else {
+			Collections.sort(listOfWords);
+		}
+		return listOfWords;
 	}
 
 }
