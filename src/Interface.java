@@ -199,4 +199,94 @@ public class Interface extends Application {
                 currentWord = objsDisplayed.get(index);
          
                }
+
+               if (currentWord != null && !currentWordList.contains(currentWord.getSpelling())) {
+                currentWord = null;
+                right.getChildren().clear();
+         
+               }
+         
+               definitions = new ArrayList < Definitions > ();
+         
+               synonyms = new ArrayList < String > ();
+         
+               antonyms = new ArrayList < String > ();
+               if (index >= 0) {
+         
+         
+                right.getChildren().clear();
+                spelling.setText(currentWord.getSpelling());
+                lastWord = currentWord;
+                right.getChildren().addAll(spelling);
+                right.getChildren().addAll(defHeader);
+                definitions = currentWord.getDefintion();
+               }
+         
+               for (Definitions def: definitions) {
+                right.getChildren().addAll(new Text(definitions.indexOf(def) + 1 + ". " + currentWord.getSpelling() + " (" + def.getPartOfSpeech() + ")"));
+                right.getChildren().addAll(new Text("\t" + def.getDefinition()));
+               }
+         
+               if (index >= 0) {
+                synonyms = currentWord.getSynonyms();
+                if (synonyms.size() > 0) {
+                 right.getChildren().add(synHeader);
+                }
+                for (String syn: synonyms) {
+                 right.getChildren().addAll(new Text("\t" + ((int) synonyms.indexOf(syn) + 1) + ". " + syn));
+                }
+         
+               }
+         
+         
+               if (index >= 0) {
+                antonyms = currentWord.getAntonyms();
+                if (antonyms.size() > 0) {
+                 right.getChildren().add(antHeader);
+                }
+                for (String ant: antonyms) {
+                 right.getChildren().addAll(new Text("\t" + ((int) antonyms.indexOf(ant) + 1) + ". " + ant));
+                }
+               }
+               if (currentWord != null && !currentWordList.contains(currentWord.getSpelling())) {
+         
+                currentWord = null;
+                right.getChildren().clear();
+               }
+              } else {
+               currentWord = null;
+               right.getChildren().clear();
+              }
+             }
+            });
+        
+            spelling.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 36));
+
+
+            HBox check = new HBox(asc, desc);
+          
+            spelling.setFill(Color.BLACK);
+            Separator separator1 = new Separator();
+          
+            Separator separator2 = new Separator();
+            separator2.setOrientation(Orientation.VERTICAL);
+            spelling.setStrokeWidth(2);
+          
+          
+          
+            HBox buttons = new HBox(addButton, rmButton);
+          
+            list.setPrefWidth(150);
+            list.setPrefHeight(maxHeight);
+            scroll.setContent(right);
+            left = new VBox(buttons, filterInput, check, separator1, list);
+            left.setSpacing(5);
+            right.setSpacing(10);
+            left.setPadding(new Insets(2, 2, 2, 2));
+            GridPane.setMargin(right, new Insets(2, 10, 2, 2));
+            HBox both = new HBox(left, scroll);
+            both.setSpacing(20);
+            content.add(both, 0, 0);
+          
+            scene = new Scene(content, 1100, maxHeight);
 }
